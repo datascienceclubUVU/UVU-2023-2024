@@ -12,4 +12,4 @@
 1. Open a New Codespace in this Repository.
 2. Go to the "price-prediction.ipynb" file.
 3. Run the Streamlit App by running the following command in the Terminal:
-   "streamlit run PricePredicitonApp.py"
+   "streamlit run PricePredictionApp.py"
