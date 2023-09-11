@@ -1,0 +1,8 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+
+listings = pd.read_parquet(r'Workshops\Intro to MLOps and ML Engineering\preprocessed_car_listings.parquet')
+
+preprocessed_data = listings[['price_y', 'model_year_y', 'make_y', 'model_y', 'trim_y', 'mileage_y', 'exterior_color_y', 'interior_color_y', 'num_accidents_y', 'num_owners_y', 'usage_type_y', 'city_y', 'state_y']]
+print(preprocessed_data.head())

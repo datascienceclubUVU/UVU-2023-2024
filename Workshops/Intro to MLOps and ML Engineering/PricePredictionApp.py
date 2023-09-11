@@ -7,7 +7,12 @@ from pandasql import sqldf
 
 st.set_page_config(page_title='Test App')
 
-data = pd.read_parquet('preprocessed_car_listings.parquet')
+@st.cache_data(ttl=3600)
+def load_data(file_path):
+    data = pd.read_parquet(file_path)
+    return data
+
+data = load_data('preprocessed_car_listings.parquet')
 
 
 st.title('Used Car Price Predictor')
@@ -22,10 +27,8 @@ with col1:
     year_selector = st.number_input(label='Model Year', min_value=2005, max_value=2024)
 
 with col2:
-    makes = sqldf(f'SELECT DISTINCT make_x FROM data WHERE model_year_x = {year_selector} ORDER BY make_x;')
-    makes = pd.Series(makes['make_x'])
-    makes = makes.tolist()
-    make_selector = st.selectbox(label='Make', options=[make for make in makes])
+    makes = sqldf(f"SELECT DISTINCT make_x FROM data WHERE model_year_x = {year_selector}")
+    make_selector = st.selectbox(label='Make', options=['Acura', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hyundai', 'INFINITI', 'Jeep', 'Kia', 'Lexus', 'Lincoln', 'MINI', 'Mazda', 'Mercedes-Benz', 'Mitsubishi', 'Nissan', 'Ram', 'Subaru', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'])
 
 with col3:
     models = sqldf(f"SELECT DISTINCT model_x FROM data WHERE model_year_x = {year_selector} AND make_x = '{make_selector}' ORDER BY model_x;")
@@ -55,10 +58,7 @@ with col7:
     owners_input = st.number_input(label='# of Owners', min_value=1, max_value=9)
 
 with col8:
-    uses = sqldf("SELECT DISTINCT usage_type_x FROM data ORDER BY usage_type_x;")
-    uses = pd.Series(uses['usage_type_x'])
-    uses = uses.tolist()
-    useage_selector = st.selectbox(label='Use Type', options=[use for use in uses])
+    useage_selector = st.selectbox(label='Use Type', options=['Personal', 'Fleet'])
 
 st.text('')
 st.text('')
@@ -67,22 +67,13 @@ st.header('Additional Details')
 col9, col10, col11, col12 = st.columns([1,1,1,1])
 
 with col9:
-    ext_colors = sqldf(f"SELECT DISTINCT exterior_color_x FROM data WHERE model_year_x = {year_selector} AND make_x = '{make_selector}' AND model_x = '{model_selector}' AND trim_x = '{trim_selector}' ORDER BY exterior_color_x")
-    ext_colors = pd.Series(ext_colors['exterior_color_x'])
-    ext_colors = ext_colors.tolist()
-    ext_color_selector = st.selectbox(label='Exterior Color', options=[ext_color for ext_color in ext_colors])
+    ext_color_selector = st.selectbox(label='Exterior Color', options=['Black', 'Blue', 'Brown', 'Gray', 'Green', 'Red', 'Silver', 'White'])
 
 with col10:
-    int_colors = sqldf(f"SELECT DISTINCT interior_color_x FROM data WHERE model_year_x = {year_selector} AND make_x = '{make_selector}' AND model_x = '{model_selector}' AND trim_x = '{trim_selector}' ORDER BY interior_color_x")
-    int_colors = pd.Series(int_colors['interior_color_x'])
-    int_colors = int_colors.tolist()
-    int_color_selector = st.selectbox(label='Interior Color', options=[int_color for int_color in int_colors])
-
+    int_color_selector = st.selectbox(label='Interior Color', options=['Black', 'Blue', 'Brown', 'Gray', 'Green', 'Red', 'White'])
+# NH, ND, WY, ME
 with col11:
-    states = sqldf(f"SELECT DISTINCT state_x FROM data WHERE state_x != 'None' ORDER BY state_x")
-    states = pd.Series(states['state_x'])
-    states = states.tolist()
-    state_selector = st.selectbox(label='State', options=[state for state in states])
+    state_selector = st.selectbox(label='State', options=['AK', 'AL', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'NE', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'TN', 'TX', 'UT', 'VA', 'WA', 'WI'])
 
 with col12:
     cities = sqldf(f"SELECT DISTINCT city_x FROM data WHERE state_x = '{state_selector}' ORDER BY city_x")
@@ -102,10 +93,10 @@ used_car_predictor.fit(X_train, y_train)
 make = sqldf(f"SELECT DISTINCT make_y FROM data WHERE make_x = '{make_selector}'")
 model = sqldf(f"SELECT DISTINCT model_y FROM data WHERE model_x = '{model_selector}'")
 trim = sqldf(f"SELECT DISTINCT trim_y FROM data WHERE trim_x = '{trim_selector}'")
-usage = sqldf(f"SELECT DISTINCT usage_type_y FROM data WHERE usage_type_x = '{useage_selector}'")
-exterior = sqldf(f"SELECT DISTINCT exterior_color_y FROM data WHERE exterior_color_x = '{ext_color_selector}'")
-interior = sqldf(f"SELECT DISTINCT interior_color_y FROM data WHERE interior_color_x = '{int_color_selector}'")
-state = sqldf(f"SELECT DISTINCT state_y FROM data WHERE state_x = '{state_selector}'")
+usage = sqldf(f"SELECT DISTINCT usage_type_y FROM data WHERE usage_type_x LIKE '%{useage_selector}%'")
+exterior = sqldf(f"SELECT DISTINCT exterior_color_y FROM data WHERE exterior_color_x LIKE '%{ext_color_selector}%'")
+interior = sqldf(f"SELECT DISTINCT interior_color_y FROM data WHERE interior_color_x LIKE '%{int_color_selector}%'")
+state = sqldf(f"SELECT DISTINCT state_y FROM data WHERE state_x LIKE '%{state_selector}%'")
 city = sqldf(f"SELECT DISTINCT city_y FROM data WHERE city_x = '{city_selector}'")
 
 a = [year_selector, pd.Series(make['make_y'])[0], pd.Series(model['model_y'])[0], pd.Series(trim['trim_y'])[0], mileage_input, accident_input, owners_input, pd.Series(usage['usage_type_y'])[0], pd.Series(exterior['exterior_color_y'])[0], pd.Series(interior['interior_color_y'])[0], pd.Series(city['city_y'])[0], pd.Series(state['state_y'])[0]]
