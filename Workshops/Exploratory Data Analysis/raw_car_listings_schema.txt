@@ -1,0 +1,14 @@
+RAW TRAINING DATA SCHEMA
+
+price - price of the vehicle listed.
+model_year - model year of the vehicle listed.
+make - make of the vehicle listed.
+trim - trim level of the vehicle specified.
+mileage - number of miles on the vehicle's odometer.
+exterior_color - exterior color of the vehicle listed.
+interior_color - interior color of the vehicle listed.
+num_accidents - number of accidents the vehicle listed has been involved in.
+num_owners - number of owners associated with the vehicle listed.
+usage_type - identifies whether the vehicle listed was used as part of a fleet or for personal use.
+city - city where the vehicle is listed.
+state - state where the vehicle is listed.
