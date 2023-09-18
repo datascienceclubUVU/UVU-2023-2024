@@ -1,4 +1,4 @@
-RAW TRAINING DATA SCHEMA
+TRAINING DATA SCHEMA
 
 price - price of the vehicle listed.
 model_year - model year of the vehicle listed.
