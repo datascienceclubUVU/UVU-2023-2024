@@ -1,0 +1,16 @@
+TRAINING DATA SCHEMA
+
+track_name - name of the song.
+artist1 - first artist featured on the song.
+artist2 - second artist featured on the song.
+artist3 - third artist featured on the song.
+artist4 - fourth artist featured on the song.
+artist5 - fifth artist featured on the song.
+album_name - name of the album the song is on.
+release_date - date the song was released on Spotify.
+danceability - metric measuring how groovy a song is (1.0 means 70s Disco-level groovy, 0.0 means Beethoven-level groovy).
+energy - metric measuring how epic the song is (1.0 means 2011 Skrillex, 0.0 means Frank Ocean).
+track_popularity - metric measuring how popular the song is based off number of streams, song downloads, and other factors (100.0 means Shape of You by Ed Sheeran, 0.0 means Late 1960s Queen).
+acousticness - proobability of a given song being acoustic (1.0 means it is acoustic, 0.0 means it isn't).
+valence - metric measuring how positive or negative the vibes are (1.0 means Pharrell Williams, 0.0 means Linkin Park).
+tempo - bpm of the song.
