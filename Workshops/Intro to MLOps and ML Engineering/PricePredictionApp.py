@@ -81,7 +81,7 @@ with col12:
     cities = cities.tolist()
     city_selector = st.selectbox(label='City', options=[city for city in cities], index=16)
 
-@ st.cache_resource
+@st.cache_resource
 def build_model():
     X = data.drop(columns=['key_0', 'price_x', 'model_year_x', 'make_x', 'model_x', 'trim_x', 'mileage_x', 'num_accidents_x', 'num_owners_x', 'exterior_color_x', 'interior_color_x', 'city_x', 'state_x', 'price_y', 'usage_type_x'])
     y = data['price_x']
